@@ -34,3 +34,6 @@ Ref: https://mulesy.com/process-records-using-salesforce-bulk-api-2-0/
   "columnDelimiter": "COMMA"  
 } 
 ```
+
+In Salesforce, the batch status can be verified as below:
+![Salesforce Status](https://github.com/heruwala/Mule-Salesforce-BulkAPI2.0/blob/master/SalesforceStatus.PNG?raw=true)
