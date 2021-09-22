@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<salesforce:sfdc-config name="Salesforce_Config" doc:name="Salesforce Config" doc:id="aa5f0c5c-de98-4e01-8aae-d259b297e271" >
+		<salesforce:basic-connection username="heruwala@curious-wolf-2bzkvf.com" password="D*bMmNopdIXE1" securityToken="dAaGvks36xzNy970wh6RgCJSb" url="https://login.salesforce.com/services/Soap/u/52.0" />
+	</salesforce:sfdc-config>
+	<flow name="test-salesforceFlow" doc:id="a317a051-e4e2-4cc3-8154-fc7f907aa17b" >
+		<scheduler doc:name="Scheduler" doc:id="8d53cb1d-2aa3-4794-bdd4-3b668730b01c" >
+			<scheduling-strategy >
+				<fixed-frequency frequency="1" timeUnit="MINUTES"/>
+			</scheduling-strategy>
+		</scheduler>
+		<ee:transform doc:name="Transform Message" doc:id="5e1c37ca-98e8-4f8e-94e4-d451bd890ce8" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+[
+	{
+		External_ID__c: "History123",
+		Name: "History",
+		value__c: 123
+	},
+	{
+		External_ID__c: "Math234",
+		Name: "Math",
+		value__c: 234
+	},
+	{
+		External_ID__c: "Science345",
+		Name: "Science",
+		value__c: 345
+	}
+]]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<ee:transform doc:name="Transform Message" doc:id="875b9863-7172-47cd-a7de-449a093c8dfa" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/csv
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:create-job-bulk-api-v2 doc:name="Create job bulk api v 2" doc:id="b575d597-4ba1-4634-8c98-287c5e013c80" config-ref="Salesforce_Config" objectType="score__c" operation="upsert" externalIdFieldName="External_ID__c" lineEnding="CRLF"/>
+		<ee:transform doc:name="Transform Message" doc:id="6a9f69c6-05ae-48b2-a7e2-9aa09825c3ff" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="da0f20d3-92dc-4de3-950d-4e53b58c1ed8" message="response: #[payload]"/>
+	</flow>
+</mule>
