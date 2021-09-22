@@ -1,13 +1,15 @@
 # Mule-Salesforce-BulkAPI2.0
 Invoking Salesforce Bulk API 2.0 from MuleSoft
 
-As long as it is a simple update to sobject and no business logic is needed, Bulk API is the best way to insert/upsert data into Salesforce from MuleSoft without hitting governor limits. The onus is on Salesforce to keep track of all the job status.
+## Architectural Justification
+As long as it is a simple update to the Salesforce sobject and when there is no business logic involved, Bulk API is the way to go for inserting/upserting data into Salesforce from MuleSoft without hitting governor limits. The onus is on Salesforce to keep track of all the job status.
 
-Mule will receive the below response from Salesforce, as you can see the state is InProgress, which does not tell anything (success/failure) about the job status.
+On successful posting of data to Salesforce, Mule will receive the below response from Salesforce, as you can see the `state` is `InProgress`, which does not tell anything (success/failure) about the job status.
 
 Ref: https://mulesy.com/process-records-using-salesforce-bulk-api-2-0/
 
-response: 
+## response:
+```json
 {  
   "lineEnding": "CRLF",  
   "numberRecordsFailed": 0,  
@@ -31,3 +33,4 @@ response:
   "object": "score__c",  
   "columnDelimiter": "COMMA"  
 } 
+```
